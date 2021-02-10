@@ -16,6 +16,8 @@ function setup() {
 function draw() {
   background(220);
   
-  rect(width/3, halfHeight, 100, 100)
-  rect(width/1.5, halfHeight, 100, 100)
+  fill("white")
+  rect(width/3, halfHeight, 100, 100);
+  fill("red");
+  rect(width/1.5, halfHeight, 100, 100);
 }
