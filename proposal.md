@@ -11,8 +11,8 @@ Pokemon-style RPG with basic battle system, random encounters, level system, and
 - SFX (Attack sounds, hurt sounds, etc.)
 
 ## Nice to Have
-- NPCs with Dialogue (act as tutorials)
+- NPCs with Dialogue (act as tutorials and tips)
 - Music (overworld theme, battle theme, victory theme, etc.)
-- Advanced SFX (footsteps, quality-of-life sounds)
-- Items
-- Weaknesses and Strengths
+- Quality-of-Life SFX
+- Items (healing, buffs)
+- Weaknesses and Strengths (Types)
