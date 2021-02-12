@@ -5,7 +5,6 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let whiteHealth = 200;
 let numberOfEnemies;
 
 function setup() {
