@@ -6,13 +6,18 @@
 // - describe what you did to take this project "above and beyond"
 
 let whiteHealth = 200;
-let redHealth = 200;
+let numberOfEnemies;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   halfHeight = height/2;
   halfWidth = width/2;
+  enemyWidth = width*(2/3);
+  allyWidth = width/3
   rectMode(CENTER);
+
+  numberOfEnemies = randomEncounter();
+  makeSprites();
 }
 
 function draw() {
@@ -21,38 +26,96 @@ function draw() {
   displaySquares();
 }
 
+class Sprite {
+  constructor(health, color, sizeX, sizeY, x, y){
+    this.health = health;
+    this.color = color;
+    this.sizeX = sizeX;
+    this.sizeY = sizeY;
+    this.x = x;
+    this.y = y;
+  }
+
+  display() {
+    if (this.health > 0) {
+      fill(this.color);
+      rect(this.x, this.y, this.sizeX, this.sizeY);
+    }
+  }
+}
+
 function keyPressed() {
   if (key === "q") {
-    redHealth -= 20;
+    enemy1.health -= 20;
+  }
+  if (numberOfEnemies >= 2) {
+    if (key === "w") {
+      enemy2.health -= 20;
+    }
+  }
+  if (numberOfEnemies === 3) {
+    if (key === "e") {
+      enemy3.health -= 20;
+    }
   }
   if (key === "a") {
-    whiteHealth -= 20;
+    player.health -= 20;
   }
-  console.log(whiteHealth);
-  console.log(redHealth);
+  console.log(player.health);
+  console.log(enemy1.health);
+  console.log(enemy2.health);
+  console.log(enemy3.health);
 }
 
 function displaySquares() {
-  if (whiteHealth > 0) {
-    fill("white");
-    rect(width/3, halfHeight, 100, 100);
+  //show player
+  player.display();
+
+  //show 1 enemy
+  if (numberOfEnemies === 1) {
+    enemy1.display();
   }
-  if (redHealth > 0) {
-    fill("red");
-    rect(width/1.5, halfHeight, 100, 100);
+  //show 2 enemies
+  else if (numberOfEnemies === 2) {
+    enemy1.display();
+    enemy2.display();
+  }
+  //show 3 enemies
+  else if (numberOfEnemies === 3) {
+    enemy1.display();
+    enemy2.display();
+    enemy3.display();
   }
 }
 
 function randomEncounter() {
-  let numberOfEnemies;
+  let enemies;
   let choice = random(0, 100);
-  if (choice >= 0 && choice < 50) {
-    numberOfEnemies = 1;
+  if (choice >= 0 && choice < 25) {
+    enemies = 1;
   }
-  else if (choice >= 50 && choice < 75) {
-    numberOfEnemies = 2;
+  else if (choice >= 25 && choice < 75) {
+    enemies = 2;
   }
   else if (choice >= 75 && choice <= 100) {
-    numberOfEnemies = 3;
+    enemies = 3;
+  }
+  return enemies;
+}
+
+function makeSprites() {
+  player = new Sprite(200, "white", 100, 100, allyWidth, halfHeight);
+
+  if (numberOfEnemies === 1) {
+    enemy1 = new Sprite(200, "red", 100, 100, enemyWidth, halfHeight);
+  }
+  if (numberOfEnemies === 2) {
+    enemy1 = new Sprite(200, "red", 100, 100, enemyWidth, height/3);
+    enemy2 = new Sprite(200, "red", 100, 100, enemyWidth, height*(2/3));
+  }
+  if (numberOfEnemies === 3) {
+    enemy1 = new Sprite(200, "red", 100, 100, enemyWidth, height/4);
+    enemy2 = new Sprite(200, "red", 100, 100, enemyWidth, halfHeight);
+    enemy3 = new Sprite(200, "red", 100, 100, enemyWidth, height*.75);
   }
 }
