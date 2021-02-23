@@ -103,6 +103,7 @@ function keyPressed() {
     }
     if (key === "b") {
       gameState = "menu";
+      resetBattle();
     }
     console.log(player.health);
     console.log(enemy1.health);
@@ -172,4 +173,9 @@ function makeSprites() {
     enemy2 = new Sprite(200, "enemy", 100, 100, enemyWidth, halfHeight);
     enemy3 = new Sprite(200, "enemy", 100, 100, enemyWidth, height*0.75);
   }
+}
+
+function resetBattle() {
+  numberOfEnemies = randomEncounter();
+  makeSprites();
 }
