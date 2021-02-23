@@ -14,14 +14,20 @@ let halfHeight;
 let halfWidth;
 let enemyWidth;
 let allyWidth;
+let gameState = "menu";
+let buttonWidth;
+let buttonHeight;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  let halfHeight = height/2;
-  let halfWidth = width/2;
-  let enemyWidth = width*(2/3);
-  let allyWidth = width/3;
+  halfHeight = height/2;
+  halfWidth = width/2;
+  enemyWidth = width*(2/3);
+  allyWidth = width/3;
+  buttonWidth = width/5;
+  buttonHeight = height/10;
   rectMode(CENTER);
+  textAlign(CENTER, CENTER);
 
   numberOfEnemies = randomEncounter();
   makeSprites();
@@ -29,14 +35,20 @@ function setup() {
 
 function draw() {
   background(220);
+  if (gameState === "menu") {
+    menuDisplay();
+  }
   
-  displaySquares();
+  if (gameState === "battle") {
+    displaySquares();
+  }
+ 
 }
 
 class Sprite {
-  constructor(health, color, sizeX, sizeY, x, y){
+  constructor(health, team, sizeX, sizeY, x, y){
     this.health = health;
-    this.color = color;
+    this.team = team;
     this.sizeX = sizeX;
     this.sizeY = sizeY;
     this.x = x;
@@ -45,33 +57,68 @@ class Sprite {
 
   display() {
     if (this.health > 0) {
-      fill(this.color);
+      if (this.team === "ally") {
+        fill("white");
+      }
+      if (this.team === "enemy"){
+        fill("red");
+      }
+      
       rect(this.x, this.y, this.sizeX, this.sizeY);
     }
   }
 }
 
+function menuDisplay() {
+  //title
+  fill("black");
+  textSize(25);
+  text("*Title Here*", width/2, height/3);
+
+  //display start button
+  fill("white");
+  rect(width/2, height/1.5, buttonWidth, buttonHeight);
+  textSize(25);
+  fill("black");
+  text("START", width/2, height/1.5);
+}
+
 function keyPressed() {
-  if (key === "q") {
-    enemy1.health -= 20;
+  if (gameState === "battle") {
+    if (key === "q") {
+      enemy1.health -= 20;
+    }
+    if (numberOfEnemies >= 2) {
+      if (key === "w") {
+        enemy2.health -= 20;
+      }
+    }
+    if (numberOfEnemies === 3) {
+      if (key === "e") {
+        enemy3.health -= 20;
+      }
+    }
+    if (key === "a") {
+      player.health -= 20;
+    }
+    if (key === "b") {
+      gameState = "menu";
+    }
+    console.log(player.health);
+    console.log(enemy1.health);
+    console.log(enemy2.health);
+    console.log(enemy3.health);
   }
-  if (numberOfEnemies >= 2) {
-    if (key === "w") {
-      enemy2.health -= 20;
+}
+
+function mousePressed() {
+  if (gameState === "menu") {
+    if (mouseX > width/2 - buttonWidth/2 && mouseX < width/2 + buttonWidth/2 && 
+        mouseY > height/1.5 - buttonHeight/2 && mouseY < height/1.5 + buttonHeight/2) {
+      gameState = "battle";
     }
   }
-  if (numberOfEnemies === 3) {
-    if (key === "e") {
-      enemy3.health -= 20;
-    }
-  }
-  if (key === "a") {
-    player.health -= 20;
-  }
-  console.log(player.health);
-  console.log(enemy1.health);
-  console.log(enemy2.health);
-  console.log(enemy3.health);
+  
 }
 
 function displaySquares() {
@@ -111,18 +158,18 @@ function randomEncounter() {
 }
 
 function makeSprites() {
-  player = new Sprite(200, "white", 100, 100, allyWidth, halfHeight);
+  player = new Sprite(200, "ally", 100, 100, allyWidth, halfHeight);
 
   if (numberOfEnemies === 1) {
-    enemy1 = new Sprite(200, "red", 100, 100, enemyWidth, halfHeight);
+    enemy1 = new Sprite(200, "enemy", 100, 100, enemyWidth, halfHeight);
   }
   if (numberOfEnemies === 2) {
-    enemy1 = new Sprite(200, "red", 100, 100, enemyWidth, height/3);
-    enemy2 = new Sprite(200, "red", 100, 100, enemyWidth, height*(2/3));
+    enemy1 = new Sprite(200, "enemy", 100, 100, enemyWidth, height/3);
+    enemy2 = new Sprite(200, "enemy", 100, 100, enemyWidth, height*(2/3));
   }
   if (numberOfEnemies === 3) {
-    enemy1 = new Sprite(200, "red", 100, 100, enemyWidth, height/4);
-    enemy2 = new Sprite(200, "red", 100, 100, enemyWidth, halfHeight);
-    enemy3 = new Sprite(200, "red", 100, 100, enemyWidth, height*0.75);
+    enemy1 = new Sprite(200, "enemy", 100, 100, enemyWidth, height/4);
+    enemy2 = new Sprite(200, "enemy", 100, 100, enemyWidth, halfHeight);
+    enemy3 = new Sprite(200, "enemy", 100, 100, enemyWidth, height*0.75);
   }
 }
