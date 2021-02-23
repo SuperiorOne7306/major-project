@@ -6,13 +6,21 @@
 // - describe what you did to take this project "above and beyond"
 
 let numberOfEnemies;
+let player;
+let enemy1;
+let enemy2;
+let enemy3;
+let halfHeight;
+let halfWidth;
+let enemyWidth;
+let allyWidth;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  halfHeight = height/2;
-  halfWidth = width/2;
-  enemyWidth = width*(2/3);
-  allyWidth = width/3
+  let halfHeight = height/2;
+  let halfWidth = width/2;
+  let enemyWidth = width*(2/3);
+  let allyWidth = width/3;
   rectMode(CENTER);
 
   numberOfEnemies = randomEncounter();
@@ -115,6 +123,6 @@ function makeSprites() {
   if (numberOfEnemies === 3) {
     enemy1 = new Sprite(200, "red", 100, 100, enemyWidth, height/4);
     enemy2 = new Sprite(200, "red", 100, 100, enemyWidth, halfHeight);
-    enemy3 = new Sprite(200, "red", 100, 100, enemyWidth, height*.75);
+    enemy3 = new Sprite(200, "red", 100, 100, enemyWidth, height*0.75);
   }
 }
