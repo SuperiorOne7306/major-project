@@ -24,13 +24,14 @@ function setup() {
   halfWidth = width/2;
   enemyWidth = width*(2/3);
   allyWidth = width/3;
-  buttonWidth = width/5;
-  buttonHeight = height/10;
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
 
   numberOfEnemies = randomEncounter();
   makeSprites();
+
+  //make new buttons
+  startButton = new Button("START", 25, "white", "black", width/5, height/10, width/2, height/1.5)
 }
 
 function draw() {
@@ -69,6 +70,32 @@ class Sprite {
   }
 }
 
+class Button {
+  constructor(txt, txtSize, buttonColor, txtColor, buttonWidth, buttonHeight, buttonX, buttonY){
+    this.txt = txt;
+    this.txtSize = txtSize;
+    this.buttonColor = buttonColor;
+    this.txtColor = txtColor;
+    this.buttonWidth = buttonWidth;
+    this.buttonHeight = buttonHeight;
+    this.buttonX = buttonX;
+    this.buttonY = buttonY;
+  }
+
+  display() {
+    fill(this.buttonColor);
+    rect(this.buttonX, this.buttonY, this.buttonWidth, this.buttonHeight);
+    textSize(this.txtSize);
+    fill(this.txtColor);
+    text(this.txt, this.buttonX, this.buttonY);
+  }
+
+  mouseOver() {
+    return (mouseX > this.buttonX - this.buttonWidth/2 && mouseX < this.buttonX + this.buttonWidth/2 && 
+      mouseY > this.buttonY - this.buttonHeight/2 && mouseY < this.buttonY + this.buttonHeight/2);
+  }
+}
+
 function menuDisplay() {
   //title
   fill("black");
@@ -76,11 +103,7 @@ function menuDisplay() {
   text("*Title Here*", width/2, height/3);
 
   //display start button
-  fill("white");
-  rect(width/2, height/1.5, buttonWidth, buttonHeight);
-  textSize(25);
-  fill("black");
-  text("START", width/2, height/1.5);
+  startButton.display();
 }
 
 function keyPressed() {
@@ -114,12 +137,10 @@ function keyPressed() {
 
 function mousePressed() {
   if (gameState === "menu") {
-    if (mouseX > width/2 - buttonWidth/2 && mouseX < width/2 + buttonWidth/2 && 
-        mouseY > height/1.5 - buttonHeight/2 && mouseY < height/1.5 + buttonHeight/2) {
+    if (startButton.mouseOver()) {
       gameState = "battle";
     }
   }
-  
 }
 
 function displaySquares() {
