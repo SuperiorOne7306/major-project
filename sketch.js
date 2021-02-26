@@ -14,13 +14,15 @@ let chr1Red;
 let chr2Blue;
 let chr3Yellow;
 let chr4Green;
+let chrGoButton;
 let halfHeight;
 let halfWidth;
 let enemyWidth;
 let allyWidth;
 let gameState = "menu";
-let battleState = "turn"
+let battleState = "turn";
 let turnOrder = [];
+let startButton;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -35,7 +37,7 @@ function setup() {
   makeSprites();
 
   //make new buttons
-  startButton = new Button("START", 25, "white", "black", width/5, height/10, width/2, height/1.5)
+  startButton = new Button("START", 25, "white", "black", width/5, height/10, width/2, height/1.5);
 }
 
 function draw() {
@@ -100,8 +102,8 @@ class Button {
   }
 
   mouseOver() {
-    return (mouseX > this.buttonX - this.buttonWidth/2 && mouseX < this.buttonX + this.buttonWidth/2 && 
-      mouseY > this.buttonY - this.buttonHeight/2 && mouseY < this.buttonY + this.buttonHeight/2);
+    return mouseX > this.buttonX - this.buttonWidth/2 && mouseX < this.buttonX + this.buttonWidth/2 && 
+      mouseY > this.buttonY - this.buttonHeight/2 && mouseY < this.buttonY + this.buttonHeight/2;
   }
 }
 
@@ -120,13 +122,11 @@ function chrSelDisplay() {
   chr2Blue.display();
   chr3Yellow.display();
   chr4Green.display();
+  chrGoButton.display();
 }
 
 function keyPressed() {
   if (gameState === "battle") {
-    if (battleState = "turn") {
-
-    }
     if (key === "q") {
       enemy1.health -= 20;
     }
@@ -163,6 +163,7 @@ function mousePressed() {
       chr2Blue = new Button("Yusuke: Ice/Physical", 20, "white", "blue", 150, 150, width/3, height*(2/3));
       chr3Yellow = new Button("Ryuji: Elec/Physical", 20, "white", "yellow", 150, 150, width*(2/3), height/3);
       chr4Green = new Button("Mona: Wind/Magic", 20, "white", "green", 150, 150, width*(2/3), height*(2/3));
+      chrGoButton = new Button("GO", 25, "white", "black", width/7, height/10, width/2, height*(1/4));
     }
   }
 
@@ -171,26 +172,29 @@ function mousePressed() {
     if (chr1Red.mouseOver()) {
       chr1Red.buttonColor = "black";
       if (chr2Blue.buttonColor === "black") {
-        chr2Blue.buttonColor = "white"
+        chr2Blue.buttonColor = "white";
       }
     }
     if (chr2Blue.mouseOver()) {
       chr2Blue.buttonColor = "black";
       if (chr1Red.buttonColor === "black") {
-        chr1Red.buttonColor = "white"
+        chr1Red.buttonColor = "white";
       }
     }
     if (chr3Yellow.mouseOver()) {
       chr3Yellow.buttonColor = "black";
       if (chr4Green.buttonColor === "black") {
-        chr4Green.buttonColor = "white"
+        chr4Green.buttonColor = "white";
       }
     }
     if (chr4Green.mouseOver()) {
       chr4Green.buttonColor = "black";
       if (chr3Yellow.buttonColor === "black") {
-        chr3Yellow.buttonColor = "white"
+        chr3Yellow.buttonColor = "white";
       }
+    }
+    if (chrGoButton.mouseOver()) {
+      gameState = "battle";
     }
   }
 }
