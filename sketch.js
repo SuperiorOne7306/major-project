@@ -7,6 +7,8 @@
 
 let numberOfEnemies;
 let player;
+let ally1;
+let ally2;
 let enemy1;
 let enemy2;
 let enemy3;
@@ -34,7 +36,7 @@ function setup() {
   textAlign(CENTER, CENTER);
 
   numberOfEnemies = randomEncounter();
-  makeSprites();
+  //makeSprites();
 
   //make new buttons
   startButton = new Button("START", 25, "white", "black", width/5, height/10, width/2, height/1.5);
@@ -57,9 +59,10 @@ function draw() {
 }
 
 class Sprite {
-  constructor(health, team, sizeX, sizeY, x, y, agility){
+  constructor(health, team, color, sizeX, sizeY, x, y, agility){
     this.health = health;
     this.team = team;
+    this.color = color;
     this.sizeX = sizeX;
     this.sizeY = sizeY;
     this.x = x;
@@ -69,12 +72,7 @@ class Sprite {
 
   display() {
     if (this.health > 0) {
-      if (this.team === "ally") {
-        fill("white");
-      }
-      if (this.team === "enemy"){
-        fill("red");
-      }
+      fill(this.color);
       
       rect(this.x, this.y, this.sizeX, this.sizeY);
     }
@@ -143,6 +141,12 @@ function keyPressed() {
     if (key === "a") {
       player.health -= 20;
     }
+    if (key === "s") {
+      ally1.health -= 20;
+    }
+    if (key === "d") {
+      ally2.health -= 20;
+    }
     if (key === "b") {
       gameState = "menu";
       resetBattle();
@@ -167,7 +171,7 @@ function mousePressed() {
     }
   }
 
-  //character select options
+  //character select options/buttons
   if (gameState === "allySelect") {
     if (chr1Red.mouseOver()) {
       chr1Red.buttonColor = "black";
@@ -194,14 +198,20 @@ function mousePressed() {
       }
     }
     if (chrGoButton.mouseOver()) {
-      gameState = "battle";
+      if ((chr1Red.buttonColor === "black" || chr2Blue.buttonColor === "black") && 
+      (chr3Yellow.buttonColor === "black" || chr4Green.buttonColor === "black")) {
+        makeSprites();
+        gameState = "battle";
+      }
     }
   }
 }
 
 function displaySquares() {
-  //show player
+  //show player/allies
   player.display();
+  ally1.display();
+  ally2.display();
 
   //show 1 enemy
   if (numberOfEnemies === 1) {
@@ -236,19 +246,35 @@ function randomEncounter() {
 }
 
 function makeSprites() {
-  player = new Sprite(200, "ally", 100, 100, allyWidth, halfHeight, 10);
+  //allies
+  player = new Sprite(200, "ally", "white", 100, 100, allyWidth, halfHeight, 10);
 
+  if (chr1Red.buttonColor === "black") {
+    ally1 = new Sprite(200, "ally", "red", 100, 100, allyWidth, height/4, 7);
+  }
+  if (chr2Blue.buttonColor === "black") {
+    ally1 = new Sprite(250, "ally", "blue", 100, 100, allyWidth, height/4, 8);
+  }
+
+  if (chr3Yellow.buttonColor === "black") {
+    ally2 = new Sprite(300, "ally", "yellow", 100, 100, allyWidth, height*0.75, 5);
+  }
+  if (chr4Green.buttonColor === "black") {
+    ally2 = new Sprite(200, "ally", "green", 100, 100, allyWidth, height*0.75, 10);
+  }
+
+  //enemies
   if (numberOfEnemies === 1) {
-    enemy1 = new Sprite(200, "enemy", 100, 100, enemyWidth, halfHeight, 7);
+    enemy1 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, halfHeight, 7);
   }
   if (numberOfEnemies === 2) {
-    enemy1 = new Sprite(200, "enemy", 100, 100, enemyWidth, height/3, 7);
-    enemy2 = new Sprite(200, "enemy", 100, 100, enemyWidth, height*(2/3), 6);
+    enemy1 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, height/3, 7);
+    enemy2 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, height*(2/3), 6);
   }
   if (numberOfEnemies === 3) {
-    enemy1 = new Sprite(200, "enemy", 100, 100, enemyWidth, height/4, 7);
-    enemy2 = new Sprite(200, "enemy", 100, 100, enemyWidth, halfHeight, 6);
-    enemy3 = new Sprite(200, "enemy", 100, 100, enemyWidth, height*0.75, 5);
+    enemy1 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, height/4, 7);
+    enemy2 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, halfHeight, 6);
+    enemy3 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, height*0.75, 5);
   }
 }
 
