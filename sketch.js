@@ -17,6 +17,9 @@ let chr2Blue;
 let chr3Yellow;
 let chr4Green;
 let chrGoButton;
+let moveButton1;
+let moveButton2;
+let moveButton3;
 let halfHeight;
 let halfWidth;
 let enemyWidth;
@@ -57,6 +60,9 @@ function draw() {
   if (gameState === "battle") {
     displaySquares();
     exper.display();
+    if (battleState === "turn") {
+      moveButtonDisplay();
+    }
   }
  
 }
@@ -290,7 +296,7 @@ function makeSprites() {
 
 function determineTurnOrder() {
   turnOrder = [];
-  for (let i=0; i <= 10; i++) {
+  for (let i=10; i > 0; i--) {
     if (player.agility === i) {
       turnOrder.push("player");
     }
@@ -335,4 +341,64 @@ function whoseTurn() {
     turnRep = 0;
   }
   return turnOrder[turnRep];
+}
+
+function moveButtons() {
+  let mveBtnTxt1;
+  let mveBtnTxt2;
+  let mveBtnTxt3;
+  if (turnState === "player") {
+    if (ally1.color === "red") {
+      mveBtnTxt1 = "Bufula";
+    }
+    if (ally1.color === "blue") {
+      mveBtnTxt1 = "Agilao";
+    }
+    if (ally2.color === "yellow") {
+      mveBtnTxt2 = "Garula";
+    }
+    if (ally2.color === "green") {
+      mveBtnTxt2 = "Zionga";
+    }
+    mveBtnTxt3 = "Cleave";
+  }
+
+  if (turnState === "ally1") {
+    if (ally1.color === "red") {
+      mveBtnTxt1 = "Agilao";
+      mveBtnTxt2 = "Diarama";
+    }
+    if (ally1.color === "blue") {
+      mveBtnTxt1 = "Bufula";
+      mveBtnTxt2 = "Cleave";
+    }
+  }
+
+  if (turnState === "ally2") {
+    if (ally1.color === "yellow") {
+      mveBtnTxt1 = "Zionga";
+      mveBtnTxt2 = "Lunge";
+    }
+    if (ally1.color === "green") {
+      mveBtnTxt1 = "Garula";
+      mveBtnTxt2 = "Diarama";
+    }
+  }
+  if (turnState !== "player") {
+    moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight+25);
+    moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight-25);
+  }
+  else {
+    moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight+50);
+    moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight);
+    moveButton3 = new Button(mveBtnTxt3, 20, "white", "black", 100, 50, 50, halfHeight-50);
+  }
+}
+
+function moveButtonDisplay() {
+  moveButton1.display();
+  moveButton2.display();
+  if (turnState === "player") {
+    moveButton3.display();
+  }
 }
