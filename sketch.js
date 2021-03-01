@@ -31,6 +31,11 @@ let turnOrder;
 let startButton;
 let turnRep = 0;
 let exper;
+let currentMove;
+let moveNum;
+let currentTarget;
+let oldX;
+let currentDamage;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -63,9 +68,12 @@ function draw() {
     if (battleState === "turn") {
       moveButtonDisplay();
     }
+    if (battleState === "damage") {
+      showDmg();
+    }
   }
- 
 }
+  
 
 class Sprite {
   constructor(health, team, color, sizeX, sizeY, x, y, agility, isAlive){
@@ -85,12 +93,21 @@ class Sprite {
       fill(this.color);
       
       rect(this.x, this.y, this.sizeX, this.sizeY);
+
+      fill("black");
+
+      text(this.health, this.x, this.y - 75);
     }
     else {
       if (this.isAlive === true) {
         this.isAlive = false;
       }
     }
+  }
+
+  mouseOver() {
+    return mouseX > this.x - this.sizeX/2 && mouseX < this.x + this.sizeX/2 && 
+      mouseY > this.y - this.sizeY/2 && mouseY < this.y + this.sizeY/2;
   }
 }
 
@@ -181,10 +198,10 @@ function mousePressed() {
     //start button to character select
     if (startButton.mouseOver()) {
       gameState = "allySelect";
-      chr1Red = new Button("Ann: Fire/Magic", 20, "white", "red", 150, 150, width/3, height/3);
-      chr2Blue = new Button("Yusuke: Ice/Physical", 20, "white", "blue", 150, 150, width/3, height*(2/3));
-      chr3Yellow = new Button("Ryuji: Elec/Physical", 20, "white", "yellow", 150, 150, width*(2/3), height/3);
-      chr4Green = new Button("Mona: Wind/Magic", 20, "white", "green", 150, 150, width*(2/3), height*(2/3));
+      chr1Red = new Button("Fire/Magic", 20, "white", "red", 150, 150, width/3, height/3);
+      chr2Blue = new Button("Ice/Physical", 20, "white", "blue", 150, 150, width/3, height*(2/3));
+      chr3Yellow = new Button("Elec/Physical", 20, "white", "yellow", 150, 150, width*(2/3), height/3);
+      chr4Green = new Button("Wind/Magic", 20, "white", "green", 150, 150, width*(2/3), height*(2/3));
       chrGoButton = new Button("GO", 25, "white", "black", width/7, height/10, width/2, height*(1/4));
     }
   }
@@ -219,6 +236,50 @@ function mousePressed() {
       if ((chr1Red.buttonColor === "black" || chr2Blue.buttonColor === "black") && 
       (chr3Yellow.buttonColor === "black" || chr4Green.buttonColor === "black")) {
         startBattle();
+      }
+    }
+  }
+
+  if (gameState === "battle") {
+    if (battleState === "turn") {
+      if (moveButton1.mouseOver()) {
+        currentMove = moveButton1.txt;
+        moveNum = 1;
+        battleState = "target";
+      }
+      if (moveButton2.mouseOver()) {
+        currentMove = moveButton2.txt;
+        moveNum = 2;
+        battleState = "target";
+      }
+      if (turnState === "player") {
+        if (moveButton3.mouseOver()) {
+          currentMove = moveButton3.txt;
+          moveNum = 3;
+          battleState = "target";
+        }
+      } 
+    }
+    if (battleState === "target") {
+      if (enemy1.mouseOver()) {
+        currentTarget = "enemy1";
+        battleState = "damage";
+        executeMove();
+      }
+      if (numberOfEnemies >= 2) {
+        if (enemy2.mouseOver()) {
+          currentTarget = "enemy2";
+          battleState = "damage";
+          executeMove();
+        }
+      }
+      if (numberOfEnemies === 3) {
+        if (enemy3.mouseOver()) {
+          currentTarget = "enemy3";
+          battleState = "damage";
+          executeMove();
+        }
+      
       }
     }
   }
@@ -402,5 +463,34 @@ function moveButtonDisplay() {
   moveButton2.display();
   if (turnState === "player") {
     moveButton3.display();
+  }
+}
+
+function executeMove() {
+  //deal damage
+  currentDamage = Math.floor(random(55, 65));
+  if (currentTarget === "enemy1") {
+    enemy1.health -= currentDamage;
+  }
+  if (currentTarget === "enemy2") {
+    enemy2.health -= currentDamage;
+  }
+  if (currentTarget === "enemy3") {
+    enemy3.health -= currentDamage;
+  }
+
+  //next turn
+  turnRep += 1;
+  turnState = whoseTurn();
+  exper.txt = turnState;
+  moveButtons();
+  battleState = "turn";
+}
+
+function showDmg() {
+  if (turnState === "player") {
+    for (let i = 0; i<100; i++) {
+      text(currentDamage, player.x, player.y + i);
+    }
   }
 }
