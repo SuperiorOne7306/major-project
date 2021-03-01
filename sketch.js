@@ -136,8 +136,8 @@ class Button {
 function menuDisplay() {
   //title
   fill("black");
-  textSize(25);
-  text("*Title Here*", width/2, height/3);
+  textSize(50);
+  text("Cubrawl", width/2, height/3);
 
   //display start button
   startButton.display();
