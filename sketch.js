@@ -421,14 +421,19 @@ function moveButtons() {
       mveBtnTxt2 = "Diarama";
     }
   }
-  if (turnState !== "player") {
-    moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight-25);
-    moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight+25);
+  if (turnState === "enemy1" || turnState === "enemy2" || turnState === "enemy3") {
+    enemyTurn();
   }
-  else {
-    moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight-50);
-    moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight);
-    moveButton3 = new Button(mveBtnTxt3, 20, "white", "black", 100, 50, 50, halfHeight+50);
+  if (turnState === "ally1" || turnState === "ally2" || turnState === "player") {
+    if (turnState !== "player") {
+      moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight-25);
+      moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight+25);
+    }
+    else {
+      moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight-50);
+      moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight);
+      moveButton3 = new Button(mveBtnTxt3, 20, "white", "black", 100, 50, 50, halfHeight+50);
+    }
   }
 }
 
@@ -453,6 +458,16 @@ function executeMove() {
     enemy3.health -= currentDamage;
   }
 
+  if (currentTarget === "player") {
+    player.health -= currentDamage;
+  }
+  if (currentTarget === "ally1") {
+    ally1.health -= currentDamage;
+  }
+  if (currentTarget === "ally2") {
+    ally2.health -= currentDamage;
+  }
+
   if (enemy1.health <= 0) {
     enemy1.isAlive = false;
   }
@@ -465,6 +480,16 @@ function executeMove() {
     if (enemy3.health <= 0) {
       enemy3.isAlive = false;
     }
+  }
+
+  if (player.health <= 0) {
+    player.isAlive = false;
+  }
+  if (ally1.health <= 0) {
+    ally1.isAlive = false;
+  }
+  if (ally2.health <= 0) {
+    ally2.isAlive = false;
   }
   
 
@@ -484,12 +509,16 @@ function executeMove() {
     }
   }
 
+  if (!player.isAlive && !ally1.isAlive && !ally2.isAlive) {
+    resetBattle();
+  }
+
   //next turn
   turnRep += 1;
   turnState = whoseTurn();
   exper.txt = turnState;
-  moveButtons();
   battleState = "turn";
+  moveButtons();
 }
 
 function displayWin() {
@@ -498,4 +527,19 @@ function displayWin() {
 
   textSize(25);
   text("Press B to go back to menu.", halfWidth, height-50);
+}
+
+function enemyTurn() {
+  let randomTarget = Math.floor(random(0, 100));
+  if (randomTarget <= 33) {
+    currentTarget = "ally1";
+  }
+  else if (randomTarget <= 67) {
+    currentTarget = "player";
+  }
+  else {
+    currentTarget = "ally2";
+  }
+  battleState = "damage";
+  executeMove();
 }
