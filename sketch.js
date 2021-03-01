@@ -168,6 +168,7 @@ function keyPressed() {
     turnRep += 1;
     turnState = whoseTurn();
     exper.txt = turnState;
+    moveButtons();
     console.log(player.health);
     console.log(enemy1.health);
     console.log(enemy2.health);
@@ -334,6 +335,7 @@ function startBattle() {
   battleState = "turn";
   turnState = whoseTurn();
   exper = new Button (turnState, 15, "white", "black", 100, 50, halfWidth, height-30);
+  moveButtons();
 }
 
 function whoseTurn() {
@@ -375,23 +377,23 @@ function moveButtons() {
   }
 
   if (turnState === "ally2") {
-    if (ally1.color === "yellow") {
+    if (ally2.color === "yellow") {
       mveBtnTxt1 = "Zionga";
       mveBtnTxt2 = "Lunge";
     }
-    if (ally1.color === "green") {
+    if (ally2.color === "green") {
       mveBtnTxt1 = "Garula";
       mveBtnTxt2 = "Diarama";
     }
   }
   if (turnState !== "player") {
-    moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight+25);
-    moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight-25);
+    moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight-25);
+    moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight+25);
   }
   else {
-    moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight+50);
+    moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight-50);
     moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight);
-    moveButton3 = new Button(mveBtnTxt3, 20, "white", "black", 100, 50, 50, halfHeight-50);
+    moveButton3 = new Button(mveBtnTxt3, 20, "white", "black", 100, 50, 50, halfHeight+50);
   }
 }
 
