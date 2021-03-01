@@ -34,7 +34,6 @@ let exper;
 let currentMove;
 let moveNum;
 let currentTarget;
-let oldX;
 let currentDamage;
 
 function setup() {
@@ -316,11 +315,11 @@ function makeSprites() {
 
   //enemies
   if (numberOfEnemies === 1) {
-    enemy1 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, halfHeight, 7, true);
+    enemy1 = new Sprite(500, "enemy", "purple", 100, 100, enemyWidth, halfHeight, 7, true);
   }
   if (numberOfEnemies === 2) {
-    enemy1 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, height/3, 7, true);
-    enemy2 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, height*(2/3), 6, true);
+    enemy1 = new Sprite(350, "enemy", "purple", 100, 100, enemyWidth, height/3, 7, true);
+    enemy2 = new Sprite(350, "enemy", "purple", 100, 100, enemyWidth, height*(2/3), 6, true);
   }
   if (numberOfEnemies === 3) {
     enemy1 = new Sprite(200, "enemy", "purple", 100, 100, enemyWidth, height/4, 7, true);
@@ -421,6 +420,7 @@ function moveButtons() {
       mveBtnTxt2 = "Diarama";
     }
   }
+
   if (turnState === "enemy1" || turnState === "enemy2" || turnState === "enemy3") {
     enemyTurn();
   }
@@ -433,6 +433,61 @@ function moveButtons() {
       moveButton1 = new Button(mveBtnTxt1, 20, "white", "black", 100, 50, 50, halfHeight-50);
       moveButton2 = new Button(mveBtnTxt2, 20, "white", "black", 100, 50, 50, halfHeight);
       moveButton3 = new Button(mveBtnTxt3, 20, "white", "black", 100, 50, 50, halfHeight+50);
+    }
+  }
+
+  if (turnState === "player") {
+    if (!player.isAlive) {
+      turnRep += 1;
+      turnState = whoseTurn();
+      exper.txt = turnState;
+      battleState = "turn";
+      moveButtons();
+    }
+  }
+  if (turnState === "ally1") {
+    if (!ally1.isAlive) {
+      turnRep += 1;
+      turnState = whoseTurn();
+      exper.txt = turnState;
+      battleState = "turn";
+      moveButtons();
+    }
+  }
+  if (turnState === "ally2") {
+    if (!ally2.isAlive) {
+      turnRep += 1;
+      turnState = whoseTurn();
+      exper.txt = turnState;
+      battleState = "turn";
+      moveButtons();
+    }
+  }
+  if (turnState === "enemy1") {
+    if (!enemy1.isAlive) {
+      turnRep += 1;
+      turnState = whoseTurn();
+      exper.txt = turnState;
+      battleState = "turn";
+      moveButtons();
+    }
+  }
+  if (turnState === "enemy2") {
+    if (!enemy2.isAlive) {
+      turnRep += 1;
+      turnState = whoseTurn();
+      exper.txt = turnState;
+      battleState = "turn";
+      moveButtons();
+    }
+  }
+  if (turnState === "enemy3") {
+    if (!enemy3.isAlive) {
+      turnRep += 1;
+      turnState = whoseTurn();
+      exper.txt = turnState;
+      battleState = "turn";
+      moveButtons();
     }
   }
 }
@@ -524,6 +579,14 @@ function executeMove() {
 function displayWin() {
   textSize(50);
   text("You Win!", halfWidth, height/3);
+
+  textSize(25);
+  text("Press B to go back to menu.", halfWidth, height-50);
+}
+
+function displayLoss() {
+  textSize(50);
+  text("You Lose!", halfWidth, height/3);
 
   textSize(25);
   text("Press B to go back to menu.", halfWidth, height-50);
