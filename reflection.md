@@ -7,9 +7,11 @@
 
 - I ran into many problems while coding that I did eventually fix like buttons crashing the program when clicked or variables ending up empty.
 
-- I did miss some elements I wanted to add like SFX and levels, but those never happened due to time constraints
+-Near the end, it got difficult to keep track of all the functions and variables since there were so many.
+
+- I did miss some elements I wanted to add like SFX and levels, but those never happened due to time constraints.
 
 ## "Most Proud Of" and "Most Difficult"
-- I am most proud of how easily I was able to code sprites and buttons as classes, as well as setting up the battle(spawning sprites, displaying them, random number of enemies)
+- I am most proud of how easily I was able to code sprites and buttons as classes, as well as setting up the battle(spawning sprites, displaying them, random number of enemies).
 
 - The most difficult part was definitely the moves. Having to set up a targeting system and keep track of turns was a long process that I didn't expect.
