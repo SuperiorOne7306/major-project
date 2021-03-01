@@ -68,9 +68,10 @@ function draw() {
     if (battleState === "turn") {
       moveButtonDisplay();
     }
-    if (battleState === "damage") {
-      showDmg();
-    }
+  }
+
+  if (gameState === "win") {
+    displayWin();
   }
 }
   
@@ -89,7 +90,7 @@ class Sprite {
   }
 
   display() {
-    if (this.health > 0) {
+    if (this.isAlive) {
       fill(this.color);
       
       rect(this.x, this.y, this.sizeX, this.sizeY);
@@ -97,11 +98,6 @@ class Sprite {
       fill("black");
 
       text(this.health, this.x, this.y - 75);
-    }
-    else {
-      if (this.isAlive === true) {
-        this.isAlive = false;
-      }
     }
   }
 
@@ -156,40 +152,10 @@ function chrSelDisplay() {
 }
 
 function keyPressed() {
-  if (gameState === "battle") {
-    if (key === "q") {
-      enemy1.health -= 20;
-    }
-    if (numberOfEnemies >= 2) {
-      if (key === "w") {
-        enemy2.health -= 20;
-      }
-    }
-    if (numberOfEnemies === 3) {
-      if (key === "e") {
-        enemy3.health -= 20;
-      }
-    }
-    if (key === "a") {
-      player.health -= 20;
-    }
-    if (key === "s") {
-      ally1.health -= 20;
-    }
-    if (key === "d") {
-      ally2.health -= 20;
-    }
+  if (gameState === "win" || gameState === "battle") {
     if (key === "b") {
       resetBattle();
     }
-    turnRep += 1;
-    turnState = whoseTurn();
-    exper.txt = turnState;
-    moveButtons();
-    console.log(player.health);
-    console.log(enemy1.health);
-    console.log(enemy2.health);
-    console.log(enemy3.health);
   }
 }
 
@@ -262,28 +228,35 @@ function mousePressed() {
     }
     if (battleState === "target") {
       if (enemy1.mouseOver()) {
-        currentTarget = "enemy1";
-        battleState = "damage";
-        executeMove();
+        if (enemy1.isAlive) {
+          currentTarget = "enemy1";
+          battleState = "damage";
+          executeMove();
+        }
       }
-      if (numberOfEnemies >= 2) {
-        if (enemy2.mouseOver()) {
+    }
+    if (numberOfEnemies >= 2) {
+      if (enemy2.mouseOver()) {
+        if (enemy2.isAlive) {
           currentTarget = "enemy2";
           battleState = "damage";
           executeMove();
         }
       }
-      if (numberOfEnemies === 3) {
-        if (enemy3.mouseOver()) {
+    }
+    if (numberOfEnemies === 3) {
+      if (enemy3.mouseOver()) {
+        if (enemy3.isAlive) {
           currentTarget = "enemy3";
           battleState = "damage";
           executeMove();
         }
-      
       }
+      
     }
   }
 }
+
 
 function displaySquares() {
   //show player/allies
@@ -386,6 +359,7 @@ function determineTurnOrder() {
 
 function resetBattle() {
   gameState = "menu";
+  turnRep = 0;
 }
 
 function startBattle() {
@@ -479,6 +453,37 @@ function executeMove() {
     enemy3.health -= currentDamage;
   }
 
+  if (enemy1.health <= 0) {
+    enemy1.isAlive = false;
+  }
+  if (numberOfEnemies >= 2) {
+    if (enemy2.health <= 0) {
+      enemy2.isAlive = false;
+    }
+  }
+  if (numberOfEnemies === 3) {
+    if (enemy3.health <= 0) {
+      enemy3.isAlive = false;
+    }
+  }
+  
+
+  if (numberOfEnemies === 1) {
+    if (!enemy1.isAlive) {
+      gameState = "win";
+    }
+  }
+  if (numberOfEnemies === 2) {
+    if (!enemy1.isAlive && !enemy2.isAlive) {
+      gameState = "win";
+    }
+  }
+  if (numberOfEnemies === 3) {
+    if (!enemy1.isAlive && !enemy2.isAlive && !enemy3.isAlive) {
+      gameState = "win";
+    }
+  }
+
   //next turn
   turnRep += 1;
   turnState = whoseTurn();
@@ -487,10 +492,10 @@ function executeMove() {
   battleState = "turn";
 }
 
-function showDmg() {
-  if (turnState === "player") {
-    for (let i = 0; i<100; i++) {
-      text(currentDamage, player.x, player.y + i);
-    }
-  }
+function displayWin() {
+  textSize(50);
+  text("You Win!", halfWidth, height/3);
+
+  textSize(25);
+  text("Press B to go back to menu.", halfWidth, height-50);
 }
